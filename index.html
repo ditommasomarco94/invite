@@ -33,22 +33,14 @@ body {
   animation: pop .25s ease;
 }
 
-.me {
-  background: #dcf8c6;
-  align-self: flex-end;
-  border-bottom-right-radius: 5px;
-}
-
 .her {
   background: white;
   align-self: flex-start;
-  border-bottom-left-radius: 5px;
 }
 
-.options {
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
+.me {
+  background: #dcf8c6;
+  align-self: flex-end;
 }
 
 button {
@@ -60,113 +52,135 @@ button {
   font-size: 14px;
 }
 
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden { display: none; }
+
 @keyframes pop {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
-
-.hidden { display: none; }
 </style>
 </head>
 
 <body>
 
-<div class="chat" id="chat">
+<div class="chat">
 
-  <!-- BOT INTRO -->
-  <div class="bubble her" id="m1">Ehi 🙂</div>
+<div class="bubble her" id="m1">Ehi 🙂</div>
 
-  <div class="bubble her hidden" id="m2">
-    Visto il caldo, ti va di bere qualcosa? 🍺🍷
-  </div>
+<div class="bubble her hidden" id="m2">
+Visto il caldo, ti va di bere qualcosa? 🍺🍷
+</div>
 
-  <!-- OPTIONS 1 -->
-  <div class="options hidden" id="o1">
-    <button onclick="yes()">Sì 😌</button>
-    <button onclick="no()">No 🙈</button>
-  </div>
+<div class="options hidden" id="o1">
+  <button onclick="yes()">Sì 😌</button>
+  <button onclick="no()">No 🙈</button>
+</div>
 
-  <div class="bubble her hidden" id="noMsg">
-    Sei sicura? 🥺
-  </div>
+<div class="bubble her hidden" id="noMsg">Sei sicura? 🥺</div>
 
-  <!-- STEP 2 -->
-  <div class="bubble her hidden" id="m3">
-    Lo sapevo 😏 Dove andiamo?
-  </div>
+<div class="bubble her hidden" id="m3">Lo sapevo 😏 Dove andiamo?</div>
 
-  <div class="options hidden" id="o2">
-    <button onclick="zone()">Milano Nord 🌿</button>
-    <button onclick="zone()">Milano Sud 🌇</button>
-  </div>
+<div class="options hidden" id="o2">
+  <button onclick="zone('Milano Nord')">Milano Nord 🌿</button>
+  <button onclick="zone('Milano Sud')">Milano Sud 🌇</button>
+</div>
 
-  <div class="bubble her hidden" id="memo">
-    io ho dei crediti per venire a Milano Nord 🥺
-  </div>
+<div class="bubble her hidden" id="memo">
+io ho dei crediti per venire a Milano Nord 🥺
+</div>
 
-  <!-- STEP 3 -->
-  <div class="bubble her hidden" id="m4">Quando?</div>
+<div class="bubble her hidden" id="m4">Quando?</div>
 
-  <div class="options hidden" id="o3">
-    <button onclick="time()">Martedì</button>
-    <button onclick="time()">Dopo la vacanza a Parigi ✈️</button>
-  </div>
+<div class="options hidden" id="o3">
+  <button onclick="time('Martedì')">Martedì</button>
+  <button onclick="time('Dopo Parigi')">Dopo la vacanza a Parigi ✈️</button>
+</div>
 
-  <!-- STEP 4 -->
-  <div class="bubble her hidden" id="m5">Quando preferisci?</div>
+<div class="bubble her hidden" id="m5">Quando preferisci?</div>
 
-  <div class="options hidden" id="o4">
-    <button onclick="final()">Dopo lavoro</button>
-    <button onclick="final()">Anche weekend</button>
-  </div>
+<div class="options hidden" id="o4">
+  <button onclick="final('Dopo lavoro')">Dopo lavoro</button>
+  <button onclick="final('Weekend')">Anche weekend</button>
+</div>
 
-  <!-- FINAL -->
-  <div class="bubble her hidden" id="finalMsg">
-    Perfetto 🤗🎉 allora ci possiamo organizzare a voce ahah
-  </div>
-
-  <div class="bubble me hidden" id="end">
-    🍺🍷🎆✨🤗
-  </div>
+<div class="bubble her hidden" id="end">
+Perfetto 🤗🎉 allora ci possiamo organizzare a voce ahah
+</div>
 
 </div>
 
 <script>
 
+let data = {
+  zone: "",
+  time: "",
+  when: ""
+};
+
 setTimeout(()=>document.getElementById("m2").classList.remove("hidden"), 800);
-setTimeout(()=>document.getElementById("o1").classList.remove("hidden"), 1400);
+setTimeout(()=>document.getElementById("o1").classList.remove("hidden"), 1300);
 
 function yes(){
   document.getElementById("o1").classList.add("hidden");
 
   setTimeout(()=>document.getElementById("m3").classList.remove("hidden"), 500);
-  setTimeout(()=>document.getElementById("o2").classList.remove("hidden"), 1000);
-  setTimeout(()=>document.getElementById("memo").classList.remove("hidden"), 1000);
+  setTimeout(()=>document.getElementById("o2").classList.remove("hidden"), 900);
+  setTimeout(()=>document.getElementById("memo").classList.remove("hidden"), 900);
 }
 
 function no(){
   document.getElementById("noMsg").classList.remove("hidden");
 }
 
-function zone(){
+function zone(z){
+  data.zone = z;
   document.getElementById("o2").classList.add("hidden");
 
   setTimeout(()=>document.getElementById("m4").classList.remove("hidden"), 600);
-  setTimeout(()=>document.getElementById("o3").classList.remove("hidden"), 1100);
+  setTimeout(()=>document.getElementById("o3").classList.remove("hidden"), 1000);
 }
 
-function time(){
+function time(t){
+  data.time = t;
   document.getElementById("o3").classList.add("hidden");
 
   setTimeout(()=>document.getElementById("m5").classList.remove("hidden"), 600);
-  setTimeout(()=>document.getElementById("o4").classList.remove("hidden"), 1100);
+  setTimeout(()=>document.getElementById("o4").classList.remove("hidden"), 1000);
 }
 
-function final(){
-  document.getElementById("o4").classList.add("hidden");
+function final(w){
+  data.when = w;
 
-  setTimeout(()=>document.getElementById("finalMsg").classList.remove("hidden"), 600);
-  setTimeout(()=>document.getElementById("end").classList.remove("hidden"), 1100);
+  document.getElementById("o4").classList.add("hidden");
+  document.getElementById("end").classList.remove("hidden");
+
+  sendData();
+}
+
+/* 🔥 FORMSPREE SEND */
+function sendData(){
+
+  fetch("https://formspree.io/f/xvgnqxyz", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: `
+🍷 NUOVA RISPOSTA INVITO
+
+Zona: ${data.zone}
+Periodo: ${data.time}
+Orario: ${data.when}
+      `
+    })
+  });
+
 }
 
 </script>

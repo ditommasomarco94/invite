@@ -5,155 +5,168 @@
 <title>ciao :)</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
 body {
   margin: 0;
   font-family: Inter, sans-serif;
-  background: radial-gradient(circle at top, #ffe6ec, #fff);
-  overflow: hidden;
+  background: #e5ddd5;
 }
 
-.container {
+.chat {
+  max-width: 420px;
+  margin: auto;
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 15px;
 }
 
-.card {
+.bubble {
+  padding: 12px 14px;
+  border-radius: 18px;
+  margin: 6px 0;
+  max-width: 80%;
+  font-size: 15px;
+  line-height: 1.3;
+  animation: pop .25s ease;
+}
+
+.me {
+  background: #dcf8c6;
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+}
+
+.her {
   background: white;
-  padding: 40px;
-  border-radius: 25px;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-  position: relative;
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
 }
 
 button {
-  padding: 12px 18px;
-  border-radius: 14px;
+  margin-top: 8px;
+  padding: 10px 12px;
   border: none;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 16px;
-  margin: 10px;
+  font-size: 14px;
 }
 
-.yes {
-  background: #ff4d7d;
-  color: white;
-}
-
-.no {
-  background: #eee;
-  position: absolute;
+@keyframes pop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .hidden { display: none; }
-
-.fade {
-  animation: fade .3s ease;
-}
-
-@keyframes fade {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0);}
-}
-
-.memo {
-  font-size: 13px;
-  opacity: 0.6;
-  margin-top: 10px;
-}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-<div class="card">
+<div class="chat" id="chat">
 
-<!-- STEP 1 -->
-<div id="s1">
-  <h2>Visto il caldo, ti va di bere qualcosa? 🍺🍷</h2>
+  <!-- BOT INTRO -->
+  <div class="bubble her" id="m1">Ehi 🙂</div>
 
-  <button class="yes" onclick="yes()">Sì 😌</button>
-  <button class="no" id="noBtn" onmouseover="moveNo()">No 🙈</button>
-</div>
+  <div class="bubble her hidden" id="m2">
+    Visto il caldo, ti va di bere qualcosa? 🍺🍷
+  </div>
 
-<!-- STEP 2 -->
-<div id="s2" class="hidden fade">
-  <h2>Lo sapevo 😏</h2>
-  <p>Dove andiamo?</p>
+  <!-- OPTIONS 1 -->
+  <div class="options hidden" id="o1">
+    <button onclick="yes()">Sì 😌</button>
+    <button onclick="no()">No 🙈</button>
+  </div>
 
-  <button onclick="zone('Nord')">Milano Nord 🌿</button>
-  <button onclick="zone('Sud')">Milano Sud 🌇</button>
+  <div class="bubble her hidden" id="noMsg">
+    Sei sicura? 🥺
+  </div>
 
-  <div class="memo">
+  <!-- STEP 2 -->
+  <div class="bubble her hidden" id="m3">
+    Lo sapevo 😏 Dove andiamo?
+  </div>
+
+  <div class="options hidden" id="o2">
+    <button onclick="zone()">Milano Nord 🌿</button>
+    <button onclick="zone()">Milano Sud 🌇</button>
+  </div>
+
+  <div class="bubble her hidden" id="memo">
     io ho dei crediti per venire a Milano Nord 🥺
   </div>
-</div>
 
-<!-- STEP 3 -->
-<div id="s3" class="hidden fade">
-  <h2>Quando?</h2>
+  <!-- STEP 3 -->
+  <div class="bubble her hidden" id="m4">Quando?</div>
 
-  <button onclick="time('Martedì')">Martedì</button>
-  <button onclick="time('Dopo Parigi')">Dopo la vacanzina a Parigi ✈️</button>
-</div>
-
-<!-- STEP 4 -->
-<div id="s4" class="hidden fade">
-  <h2>Ok, quando?</h2>
-
-  <button onclick="finale('Dopo lavoro')">Dopo lavoro</button>
-  <button onclick="finale('Weekend')">Anche weekend</button>
-</div>
-
-<!-- FINAL -->
-<div id="final" class="hidden fade">
-  <h2>Perfetto 🤗🎉</h2>
-
-  <p>Allora ci possiamo organizzare a voce ahah</p>
-
-  <div style="font-size:40px;">
-    🤗🎆🍺🍷✨
+  <div class="options hidden" id="o3">
+    <button onclick="time()">Martedì</button>
+    <button onclick="time()">Dopo la vacanza a Parigi ✈️</button>
   </div>
-</div>
 
-</div>
+  <!-- STEP 4 -->
+  <div class="bubble her hidden" id="m5">Quando preferisci?</div>
+
+  <div class="options hidden" id="o4">
+    <button onclick="final()">Dopo lavoro</button>
+    <button onclick="final()">Anche weekend</button>
+  </div>
+
+  <!-- FINAL -->
+  <div class="bubble her hidden" id="finalMsg">
+    Perfetto 🤗🎉 allora ci possiamo organizzare a voce ahah
+  </div>
+
+  <div class="bubble me hidden" id="end">
+    🍺🍷🎆✨🤗
+  </div>
+
 </div>
 
 <script>
 
-let noBtn = document.getElementById("noBtn");
+setTimeout(()=>document.getElementById("m2").classList.remove("hidden"), 800);
+setTimeout(()=>document.getElementById("o1").classList.remove("hidden"), 1400);
 
 function yes(){
-  document.getElementById("s1").classList.add("hidden");
-  document.getElementById("s2").classList.remove("hidden");
+  document.getElementById("o1").classList.add("hidden");
+
+  setTimeout(()=>document.getElementById("m3").classList.remove("hidden"), 500);
+  setTimeout(()=>document.getElementById("o2").classList.remove("hidden"), 1000);
+  setTimeout(()=>document.getElementById("memo").classList.remove("hidden"), 1000);
 }
 
-function moveNo(){
-  let x = Math.random() * 220;
-  let y = Math.random() * 220;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+function no(){
+  document.getElementById("noMsg").classList.remove("hidden");
 }
 
-function zone(z){
-  document.getElementById("s2").classList.add("hidden");
-  document.getElementById("s3").classList.remove("hidden");
+function zone(){
+  document.getElementById("o2").classList.add("hidden");
+
+  setTimeout(()=>document.getElementById("m4").classList.remove("hidden"), 600);
+  setTimeout(()=>document.getElementById("o3").classList.remove("hidden"), 1100);
 }
 
-function time(t){
-  document.getElementById("s3").classList.add("hidden");
-  document.getElementById("s4").classList.remove("hidden");
+function time(){
+  document.getElementById("o3").classList.add("hidden");
+
+  setTimeout(()=>document.getElementById("m5").classList.remove("hidden"), 600);
+  setTimeout(()=>document.getElementById("o4").classList.remove("hidden"), 1100);
 }
 
-function finale(x){
-  document.getElementById("s4").classList.add("hidden");
-  document.getElementById("final").classList.remove("hidden");
+function final(){
+  document.getElementById("o4").classList.add("hidden");
+
+  setTimeout(()=>document.getElementById("finalMsg").classList.remove("hidden"), 600);
+  setTimeout(()=>document.getElementById("end").classList.remove("hidden"), 1100);
 }
 
 </script>

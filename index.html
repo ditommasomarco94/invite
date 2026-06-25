@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>🍷 Una cosa veloce</title>
+<title>ciao :)</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
@@ -29,12 +29,7 @@ body {
   width: 90%;
   max-width: 420px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-  transition: all .4s ease;
   position: relative;
-}
-
-h1, h2 {
-  margin-bottom: 20px;
 }
 
 button {
@@ -44,44 +39,33 @@ button {
   cursor: pointer;
   font-size: 16px;
   margin: 10px;
-  transition: 0.2s;
 }
 
 .yes {
   background: #ff4d7d;
   color: white;
-  transform: scale(1);
 }
-
-.yes:hover { transform: scale(1.05); }
 
 .no {
   background: #eee;
   position: absolute;
 }
 
+.hidden { display: none; }
+
+.memo {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 10px;
+}
+
 .fade {
-  animation: fade .4s ease;
+  animation: fade .3s ease;
 }
 
 @keyframes fade {
   from {opacity: 0; transform: translateY(10px);}
   to {opacity: 1; transform: translateY(0);}
-}
-
-.hidden { display: none; }
-
-.big {
-  font-size: 22px;
-}
-
-.confetti {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
 }
 </style>
 </head>
@@ -89,47 +73,61 @@ button {
 <body>
 
 <div class="container">
+<div class="card">
 
-<div class="card" id="card">
+<!-- STEP 1 -->
+<div id="s1">
+  <h2>Visto il caldo, ti va di bere qualcosa? 🍺🍷</h2>
 
-  <!-- STEP 1 -->
-  <div id="s1">
-    <h1>Andiamo a bere una cosina? 🍷🍺</h1>
-    <button class="yes" onclick="yes()">Sì 😌✨</button>
-    <button class="no" id="noBtn" onmouseover="moveNo()">No 🙈</button>
+  <button class="yes" onclick="yes()">Sì 😌</button>
+  <button class="no" id="noBtn" onmouseover="moveNo()">No 🙈</button>
+</div>
+
+<!-- STEP 2 -->
+<div id="s2" class="hidden fade">
+  <h2>Lo sapevo 😏</h2>
+  <p>Dove andiamo?</p>
+
+  <button onclick="zone('Nord')">Milano Nord 🌿</button>
+  <button onclick="zone('Sud')">Milano Sud 🌇</button>
+
+  <div class="memo">
+    io ho dei crediti per venire a Milano Nord 🥺
   </div>
+</div>
 
-  <!-- STEP 2 -->
-  <div id="s2" class="hidden fade">
-    <h2>Lo sapevo 😏</h2>
-    <p class="big">Dove andiamo?</p>
-    <button onclick="zone('Nord')">Milano Nord 🌿</button>
-    <button onclick="zone('Sud')">Milano Sud 🌇</button>
-  </div>
+<!-- STEP 3 -->
+<div id="s3" class="hidden fade">
+  <h2>Quando??</h2>
 
-  <!-- STEP 3 -->
-  <div id="s3" class="hidden fade">
-    <h2>Io ho dei crediti per venire su 🥺</h2>
-    <p>Quando?</p>
-    <button onclick="time('Oggi')">Oggi?</button>
-    <button onclick="time('Settimana prossima')">Prima che parti 😢</button>
-  </div>
+  <button onclick="time('Martedì')">Martedì</button>
+  <button onclick="time('Dopo Parigi')">Dopo la vacanzina a Parigi ✈️</button>
+</div>
 
-  <!-- FINAL -->
-  <div id="s4" class="hidden fade">
-    <h1>Perfetto 🎉✨</h1>
-    <p>Ci sentiamo 💌</p>
-    <div style="font-size:40px;">🍷🍺🎊✨🍾</div>
+<!-- STEP 4 -->
+<div id="s4" class="hidden fade">
+  <h2>Ok, ma dopo lavoro?</h2>
+
+  <button onclick="finale('Dopo lavoro')">Sì</button>
+  <button onclick="finale('Rinfresca dopo lavoro')">Leggermente dopo, quando si rinfresca 🌙</button>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="hidden fade">
+  <h2>Perfetto 🤗🎉</h2>
+  <p>Ci sta.</p>
+
+  <div style="font-size:40px;">
+    🤗🎆🍺🍷✨
   </div>
+</div>
 
 </div>
 </div>
-
-<canvas class="confetti" id="confetti"></canvas>
 
 <script>
+
 let noBtn = document.getElementById("noBtn");
-let step = 1;
 
 function yes(){
   document.getElementById("s1").classList.add("hidden");
@@ -137,8 +135,8 @@ function yes(){
 }
 
 function moveNo(){
-  let x = Math.random() * 200;
-  let y = Math.random() * 200;
+  let x = Math.random() * 220;
+  let y = Math.random() * 220;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
@@ -150,54 +148,13 @@ function zone(z){
 function time(t){
   document.getElementById("s3").classList.add("hidden");
   document.getElementById("s4").classList.remove("hidden");
-
-  launchConfetti();
 }
 
-/* 🎊 CONFETTI SIMPLE */
-function launchConfetti(){
-  const canvas = document.getElementById("confetti");
-  const ctx = canvas.getContext("2d");
-
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  let pieces = [];
-
-  for(let i=0;i<120;i++){
-    pieces.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height,
-      r: Math.random()*6+2,
-      d: Math.random()*100
-    });
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "#ff4d7d";
-
-    pieces.forEach(p=>{
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-      ctx.fill();
-    });
-
-    update();
-  }
-
-  function update(){
-    pieces.forEach(p=>{
-      p.y += Math.random()*3+2;
-      if(p.y > canvas.height){
-        p.y = 0;
-        p.x = Math.random()*canvas.width;
-      }
-    });
-  }
-
-  setInterval(draw, 30);
+function finale(x){
+  document.getElementById("s4").classList.add("hidden");
+  document.getElementById("final").classList.remove("hidden");
 }
+
 </script>
 
 </body>

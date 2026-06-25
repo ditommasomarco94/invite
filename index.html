@@ -53,12 +53,6 @@ button {
 
 .hidden { display: none; }
 
-.memo {
-  font-size: 13px;
-  opacity: 0.6;
-  margin-top: 10px;
-}
-
 .fade {
   animation: fade .3s ease;
 }
@@ -66,6 +60,12 @@ button {
 @keyframes fade {
   from {opacity: 0; transform: translateY(10px);}
   to {opacity: 1; transform: translateY(0);}
+}
+
+.memo {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -98,7 +98,7 @@ button {
 
 <!-- STEP 3 -->
 <div id="s3" class="hidden fade">
-  <h2>Quando??</h2>
+  <h2>Quando?</h2>
 
   <button onclick="time('Martedì')">Martedì</button>
   <button onclick="time('Dopo Parigi')">Dopo la vacanzina a Parigi ✈️</button>
@@ -106,16 +106,17 @@ button {
 
 <!-- STEP 4 -->
 <div id="s4" class="hidden fade">
-  <h2>Ok, ma dopo lavoro?</h2>
+  <h2>Ok, quando?</h2>
 
-  <button onclick="finale('Dopo lavoro')">Sì</button>
-  <button onclick="finale('Rinfresca dopo lavoro')">Leggermente dopo, quando si rinfresca 🌙</button>
+  <button onclick="finale('Dopo lavoro')">Dopo lavoro</button>
+  <button onclick="finale('Weekend')">Anche weekend</button>
 </div>
 
 <!-- FINAL -->
 <div id="final" class="hidden fade">
   <h2>Perfetto 🤗🎉</h2>
-  <p>Ci sta.</p>
+
+  <p>Allora ci possiamo organizzare a voce ahah</p>
 
   <div style="font-size:40px;">
     🤗🎆🍺🍷✨

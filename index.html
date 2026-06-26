@@ -188,45 +188,32 @@ ora ci possiamo organizzare a voce ahah<br><br>
 <script>
 
 /* =========================
-   TELEGRAM CONFIG
+   FORMSPREE CONFIG
    ========================= */
-const BOT_TOKEN = "8745230529:AAEFzd1PGN0yAF8Tefqn6TXQTdmDmkI9Y50";
-const CHAT_ID = "71906563";
+const FORM_ENDPOINT = "https://formspree.io/f/xgojkegv";
 
 /* =========================
-   TELEGRAM SEND FUNCTION
+   SEND DATA
    ========================= */
-function sendTelegram(data){
+function sendToFormspree(data){
 
-const text =
-`🍸 NUOVA RISPOSTA
-
-😌 Risposta: si
-📍 Zona: ${data.zona}
-📅 Quando: ${data.quando}`;
-
-fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+fetch(FORM_ENDPOINT, {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
 },
-body: JSON.stringify({
-chat_id: CHAT_ID,
-text: text
-})
+body: JSON.stringify(data)
 });
 
 }
 
 /* =========================
-   FLOW VARIABLES
+   FLOW DATA
    ========================= */
 let selectedZone = "";
 let selectedTime = "";
 
-/* =========================
-   STEP 1 → STEP 2
-   ========================= */
+/* STEP 1 */
 function go2(){
 
 document.getElementById("s1").classList.add("hidden");
@@ -243,24 +230,21 @@ document.getElementById("ottimo").classList.remove("hidden");
 
 }
 
-/* =========================
-   STEP 2 → STEP 3
-   ========================= */
+/* STEP 2 */
 function go3(zone){
 selectedZone = zone;
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
 }
 
-/* =========================
-   FINAL STEP + SEND
-   ========================= */
+/* STEP 3 + SEND */
 function finalStep(time){
 
 selectedTime = time;
 
-/* 📩 SEND TELEGRAM */
-sendTelegram({
+/* 📩 SEND HERE */
+sendToFormspree({
+  risposta: "si",
   zona: selectedZone,
   quando: selectedTime
 });
@@ -282,7 +266,6 @@ function moveNo(){
 
 const r = btnRow.getBoundingClientRect();
 
-/* lock initial position */
 if(!activated){
 
 const rect = noBtn.getBoundingClientRect();

@@ -35,7 +35,6 @@ font-size:26px;
 margin-bottom:25px;
 }
 
-/* GLOBAL BUTTON UI */
 .btn-row{
 display:flex;
 justify-content:center;
@@ -65,10 +64,6 @@ background:#ff5b8a;
 color:white;
 }
 
-.yes:active{
-transform:scale(.95);
-}
-
 .no{
 background:#eee;
 color:#111;
@@ -81,11 +76,6 @@ position:relative;
 margin-top:16px;
 font-size:13px;
 opacity:.65;
-}
-
-.final{
-font-size:18px;
-line-height:1.6;
 }
 
 .fade{
@@ -182,14 +172,9 @@ ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 <!-- FINAL -->
 <div id="final" class="hidden fade">
 
-<div class="final">
-
-ora ci possiamo organizzare a voce ahah
-
-<br><br>
-
+<div style="font-size:18px;line-height:1.6;">
+ora ci possiamo organizzare a voce ahah<br><br>
 🧊✨🍸🍺✨🧊
-
 </div>
 
 </div>
@@ -198,61 +183,61 @@ ora ci possiamo organizzare a voce ahah
 
 <script>
 
-const noBtn =
-document.getElementById("noBtn");
-
-const btnRow =
-document.querySelector(".btn-row");
+const noBtn = document.getElementById("noBtn");
+const btnRow = document.querySelector(".btn-row");
 
 let activated = false;
 
-/* 🔥 MORE LIVELY NO BUTTON */
+/* 🧠 LEARNING SYSTEM */
+let speed = 1;
+let escapes = 0;
+
 function moveNo(){
 
-const r =
-btnRow.getBoundingClientRect();
+const r = btnRow.getBoundingClientRect();
 
-/* lock initial position */
+/* init lock */
 if(!activated){
 
-const rect =
-noBtn.getBoundingClientRect();
-
-const parent =
-btnRow.getBoundingClientRect();
+const rect = noBtn.getBoundingClientRect();
+const parent = btnRow.getBoundingClientRect();
 
 noBtn.style.position="absolute";
-
-noBtn.style.left =
-(rect.left - parent.left) + "px";
-
-noBtn.style.top =
-(rect.top - parent.top) + "px";
+noBtn.style.left = (rect.left - parent.left) + "px";
+noBtn.style.top = (rect.top - parent.top) + "px";
 
 activated = true;
 }
 
-/* 💥 BIGGER RANDOM RANGE + more chaos */
+/* 🔥 "learning": more escapes = faster movement */
+escapes++;
+speed = 1 + (escapes * 0.15); // grows over time
+
 const maxX = r.width - 150;
 const maxY = r.height - 70;
 
-/* avoid center zone */
-let x, y;
-do {
-x = Math.random() * maxX;
-y = Math.random() * maxY;
-} while (x > maxX*0.3 && x < maxX*0.7);
+/* weighted chaos */
+let x = Math.random() * maxX;
+let y = Math.random() * maxY;
+
+/* avoid center (gets more aggressive over time) */
+const centerZone = 0.35 - (escapes * 0.005);
+if(x > maxX * centerZone && x < maxX * (1 - centerZone)){
+x = Math.random() < 0.5 ? 0 : maxX;
+}
+
+/* apply movement */
+noBtn.style.transition = `all ${0.25 / speed}s cubic-bezier(.2,.8,.2,1)`;
 
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
-/* little “double jump” effect */
-setTimeout(()=>{
-noBtn.style.transform = "scale(1.05)";
+/* micro panic effect */
+noBtn.style.transform = `scale(${1 + speed * 0.03})`;
+
 setTimeout(()=>{
 noBtn.style.transform = "scale(1)";
 },120);
-},80);
 
 }
 
@@ -261,7 +246,7 @@ noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
-/* YES flow */
+/* YES */
 function go2(){
 
 document.getElementById("s1").classList.add("hidden");
@@ -289,9 +274,11 @@ document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
 }
 
-/* init */
+/* reset */
 window.onload = () => {
 activated = false;
+escapes = 0;
+speed = 1;
 };
 
 </script>

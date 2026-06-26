@@ -35,21 +35,29 @@ font-size:26px;
 margin-bottom:25px;
 }
 
+/* 🔥 FIX: bottone identico per evitare shift visivo */
 .btn-row{
 display:flex;
 justify-content:center;
 gap:14px;
 position:relative;
 height:70px;
+align-items:center;
 }
 
 button{
-padding:14px 20px;
+height:46px;
+min-width:120px;
+padding:0 18px;
 border:none;
 border-radius:14px;
 cursor:pointer;
 font-size:16px;
+display:flex;
+align-items:center;
+justify-content:center;
 transition:.2s ease;
+white-space:nowrap;
 }
 
 .yes{
@@ -61,9 +69,11 @@ color:white;
 transform:scale(.95);
 }
 
+/* base stabile */
 .no{
 background:#eee;
-position:absolute;
+color:#111;
+position:relative;
 }
 
 .hidden{
@@ -122,9 +132,9 @@ Visto il caldo,<br>
 ti va di bere qualcosa? 🧊🍸🍺
 </h1>
 
-<div class="btn-row" id="btnRow">
+<div class="btn-row">
 
-<button class="yes" onclick="go2(event)">Sì 😌</button>
+<button class="yes" id="yesBtn" onclick="go2()">Sì 😌</button>
 <button class="no" id="noBtn">No 🙈</button>
 
 </div>
@@ -187,10 +197,15 @@ const noBtn =
 document.getElementById("noBtn");
 
 const btnRow =
-document.getElementById("btnRow");
+document.querySelector(".btn-row");
 
-/* FIX: perfect initial alignment */
-function initNo(){
+let activated = false;
+
+/* 🔥 FIX VERO: congelamento posizione perfetto */
+function moveNo(){
+
+/* prima volta: aggancia posizione reale */
+if(!activated){
 
 const rect =
 noBtn.getBoundingClientRect();
@@ -206,17 +221,14 @@ noBtn.style.left =
 noBtn.style.top =
 (rect.top - parent.top) + "px";
 
-noBtn.dataset.init="1";
-
+activated = true;
 }
 
-/* move after hover */
-function moveNo(){
-
+/* movimento dentro area */
 const r =
 btnRow.getBoundingClientRect();
 
-const maxX = r.width - 120;
+const maxX = r.width - 130;
 const maxY = r.height - 50;
 
 const x = Math.random() * maxX;
@@ -231,9 +243,10 @@ noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 
 /* YES flow */
-function go2(e){
+function go2(){
 
-const btn = e.target;
+const btn =
+document.getElementById("yesBtn");
 
 btn.style.transform="scale(1.05)";
 setTimeout(()=>btn.style.transform="scale(1)",120);
@@ -241,6 +254,7 @@ setTimeout(()=>btn.style.transform="scale(1)",120);
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 
+/* typing */
 setTimeout(()=>{
 document.getElementById("typing").classList.remove("hidden");
 },400);
@@ -252,7 +266,7 @@ document.getElementById("ottimo").classList.remove("hidden");
 
 }
 
-/* steps */
+/* flow */
 function go3(){
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
@@ -263,8 +277,10 @@ document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
 }
 
-/* init on load */
-window.onload = initNo;
+/* init */
+window.onload = () => {
+activated = false;
+};
 
 </script>
 

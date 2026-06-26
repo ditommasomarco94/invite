@@ -260,21 +260,35 @@ const no=document.getElementById("noBtn");
 
 function escapeButton(){
 
-const maxX=
-window.innerWidth-220;
+const card =
+document.querySelector(".card");
 
-const maxY=
-window.innerHeight-140;
+const area =
+card.getBoundingClientRect();
 
-const x=
-Math.random()*maxX;
+const padding = 40;
 
-const y=
-Math.random()*maxY;
+const maxX =
+area.width - 140;
 
-no.style.left=x+"px";
+const maxY =
+area.height - 80;
 
-no.style.top=y+"px";
+const x =
+padding +
+Math.random() *
+(maxX - padding);
+
+const y =
+80 +
+Math.random() *
+(maxY - 80);
+
+no.style.left =
+x + "px";
+
+no.style.top =
+y + "px";
 
 }
 

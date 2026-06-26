@@ -64,6 +64,10 @@ background:#ff5b8a;
 color:white;
 }
 
+.yes:active{
+transform:scale(.95);
+}
+
 .no{
 background:#eee;
 color:#111;
@@ -100,6 +104,11 @@ to{opacity:1;transform:none;}
 margin-top:16px;
 font-size:13px;
 opacity:.65;
+}
+
+.final{
+font-size:18px;
+line-height:1.6;
 }
 
 </style>
@@ -186,65 +195,58 @@ const noBtn = document.getElementById("noBtn");
 const btnRow = document.querySelector(".btn-row");
 
 let activated = false;
+let step = 0;
 
-/* 🧠 PANIC LEVEL SYSTEM */
-let panic = 1;
-let moves = 0;
-
-/* 🔥 ULTRA SCAPPA MODE */
-function moveNo(e){
+/* 😏 CONTROLLED FAST BUT ANNOYING NO */
+function moveNo(){
 
 const r = btnRow.getBoundingClientRect();
 
-/* init lock */
+/* lock initial position */
 if(!activated){
 
 const rect = noBtn.getBoundingClientRect();
 const parent = btnRow.getBoundingClientRect();
 
-noBtn.style.position="absolute";
+noBtn.style.position = "absolute";
 noBtn.style.left = (rect.left - parent.left) + "px";
 noBtn.style.top = (rect.top - parent.top) + "px";
 
 activated = true;
 }
 
-/* increase panic every interaction */
-moves++;
-panic = 1 + moves * 0.25;
+/* growth (controlled difficulty) */
+step++;
 
-/* 🔥 HUGE MOVEMENT AREA (not just row anymore) */
-const maxX = r.width + 120;
-const maxY = r.height + 120;
+/* bigger movement area but not chaos */
+const marginX = 80 + step * 8;
+const marginY = 60 + step * 6;
 
-/* random escape vector */
-let x = (Math.random() - 0.5) * maxX + r.width / 2;
-let y = (Math.random() - 0.5) * maxY + r.height / 2;
+const maxX = r.width + marginX;
+const maxY = r.height + marginY;
+
+/* smooth escape */
+let x = Math.random() * maxX;
+let y = Math.random() * maxY;
 
 /* clamp inside card */
-x = Math.max(0, Math.min(r.width - 100, x));
+x = Math.max(0, Math.min(r.width - 120, x));
 y = Math.max(0, Math.min(r.height - 50, y));
 
-/* faster and more chaotic */
-noBtn.style.transition = `all ${0.18 / panic}s cubic-bezier(.2,.9,.2,1)`;
+/* faster but still readable */
+const speed = 1 + step * 0.1;
 
-/* apply */
+noBtn.style.transition = `all ${0.24 / speed}s ease-out`;
+
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
-/* panic scale */
-noBtn.style.transform = `scale(${1 + panic * 0.04})`;
-
-setTimeout(()=>{
-noBtn.style.transform = "scale(1)";
-},90);
-
 }
 
-/* reacts to EVERYTHING now */
+/* interactions */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("mousemove", moveNo);
-noBtn.addEventListener("mousedown", moveNo);
+noBtn.addEventListener("click", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
 /* YES */
@@ -275,11 +277,9 @@ document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
 }
 
-/* reset */
 window.onload = () => {
 activated = false;
-moves = 0;
-panic = 1;
+step = 0;
 };
 
 </script>

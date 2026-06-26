@@ -8,132 +8,68 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
 
-*{
-box-sizing:border-box;
-}
-
 body{
 margin:0;
 font-family:Inter,sans-serif;
-
-background:
-radial-gradient(circle at top,#ffe6ec,#fff);
-
+background:radial-gradient(circle at top,#ffe6ec,#fff);
 height:100vh;
-
 display:flex;
-
 justify-content:center;
-
 align-items:center;
-
 overflow:hidden;
 }
 
 .card{
-
 width:90%;
-
 max-width:430px;
-
 background:white;
-
 padding:40px;
-
 border-radius:28px;
-
-box-shadow:
-0 25px 60px rgba(0,0,0,.08);
-
+box-shadow:0 25px 60px rgba(0,0,0,.08);
 text-align:center;
-
 position:relative;
-
-animation:fade .4s;
 }
 
 h1{
-font-size:28px;
+font-size:26px;
 margin-bottom:30px;
 }
 
 button{
-
 padding:14px 20px;
-
 border:none;
-
 border-radius:14px;
-
 margin:10px;
-
 cursor:pointer;
-
 font-size:16px;
-
-transition:.2s;
 }
 
 .yes{
-
 background:#ff5b8a;
-
 color:white;
 }
 
-.yes:hover{
-
-transform:scale(1.04);
-}
-
 .no{
-
 background:#eee;
-
 position:absolute;
-
 left:50%;
-
 transform:translateX(-50%);
 }
 
-.hidden{
-
-display:none;
-}
+.hidden{display:none;}
 
 .memo{
-
 margin-top:16px;
-
 font-size:13px;
-
 opacity:.65;
 }
 
 .final{
-
 font-size:18px;
-
 line-height:1.6;
 }
 
-@keyframes fade{
-
-from{
-opacity:0;
-transform:translateY(10px);
-}
-
-to{
-opacity:1;
-transform:none;
-}
-
-}
-
 </style>
-
 </head>
 
 <body>
@@ -141,104 +77,50 @@ transform:none;
 <div class="card">
 
 <!-- STEP 1 -->
-
 <div id="s1">
 
 <h1>
 Visto il caldo,<br>
-ti va di bere qualcosa?
-🍺🍷
+ti va di bere qualcosa? 🍺🍷
 </h1>
 
-<button
-class="yes"
-onclick="goStep2()">
-
-Sì 😌
-
-</button>
-
-<button
-class="no"
-id="noBtn">
-
-No 🙈
-
-</button>
+<button class="yes" onclick="go2()">Sì 😌</button>
+<button class="no" id="noBtn">No 🙈</button>
 
 </div>
 
 <!-- STEP 2 -->
+<div id="s2" class="hidden">
 
-<div
-id="s2"
-class="hidden">
-
-<h1>
-ottimo 😏
-</h1>
+<h1>ottimo 😏</h1>
 
 <p>
 Milano Nord<br>
-oppure<br>
-Milano Sud?
+o<br>
+Milano Sud
 </p>
 
-<button
-class="yes"
-onclick="goStep3()">
-
-Milano Nord 🌿
-
-</button>
-
-<button
-onclick="goStep3()">
-
-Milano Sud 🌇
-
-</button>
+<button onclick="go3()">Milano Nord 🌿</button>
+<button onclick="go3()">Milano Sud 🌇</button>
 
 <div class="memo">
-
 io ho dei crediti per venire a Milano Nord 🥺
-
 </div>
 
 </div>
 
 <!-- STEP 3 -->
+<div id="s3" class="hidden">
 
-<div
-id="s3"
-class="hidden">
+<h1>Quando?</h1>
 
-<h1>
-Quando?
-</h1>
-
-<button
-class="yes"
-onclick="finish()">
-
-tipo Martedì
-
-</button>
-
-<button
-onclick="finish()">
-
-Dopo la vacanzina a Parigi ✈️
-
-</button>
+<button onclick="goFinal()">Martedì</button>
+<button onclick="goFinal()">Dopo la vacanzina a Parigi ✈️</button>
 
 </div>
 
 <!-- FINAL -->
-
-<div
-id="final"
-class="hidden">
+<div id="final" class="hidden">
 
 <div class="final">
 
@@ -256,95 +138,53 @@ ora ci possiamo organizzare a voce ahah
 
 <script>
 
-const no=document.getElementById("noBtn");
-
-function escapeButton(){
+const noBtn =
+document.getElementById("noBtn");
 
 const card =
 document.querySelector(".card");
 
-const area =
+function moveNo(){
+
+const r =
 card.getBoundingClientRect();
 
-const padding = 40;
-
-const maxX =
-area.width - 140;
-
-const maxY =
-area.height - 80;
-
 const x =
-padding +
-Math.random() *
-(maxX - padding);
+Math.random() * (r.width - 120);
 
 const y =
-80 +
-Math.random() *
-(maxY - 80);
+Math.random() * (r.height - 120);
 
-no.style.left =
-x + "px";
-
-no.style.top =
-y + "px";
+noBtn.style.left = x + "px";
+noBtn.style.top = y + "px";
 
 }
 
-no.addEventListener(
-"mouseenter",
-escapeButton
-);
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("click", moveNo);
 
-no.addEventListener(
-"click",
-escapeButton
-);
+function go2(){
 
-function goStep2(){
-
-document
-.getElementById("s1")
-.classList
-.add("hidden");
-
-document
-.getElementById("s2")
-.classList
-.remove("hidden");
+document.getElementById("s1").classList.add("hidden");
+document.getElementById("s2").classList.remove("hidden");
 
 }
 
-function goStep3(){
+function go3(){
 
-document
-.getElementById("s2")
-.classList
-.add("hidden");
-
-document
-.getElementById("s3")
-.classList
-.remove("hidden");
+document.getElementById("s2").classList.add("hidden");
+document.getElementById("s3").classList.remove("hidden");
 
 }
 
-function finish(){
+function goFinal(){
 
-document
-.getElementById("s3")
-.classList
-.add("hidden");
-
-document
-.getElementById("final")
-.classList
-.remove("hidden");
+document.getElementById("s3").classList.add("hidden");
+document.getElementById("final").classList.remove("hidden");
 
 }
 
-escapeButton();
+moveNo();
 
 </script>
 

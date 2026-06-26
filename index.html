@@ -30,24 +30,25 @@ text-align:center;
 position:relative;
 }
 
+/* TITOLI */
 h1{
 font-size:26px;
 margin-bottom:25px;
 }
 
-/* 🔥 FIX: bottone identico per evitare shift visivo */
+/* 🔥 STANDARD UI BUTTONS (FIX TUTTO) */
 .btn-row{
 display:flex;
 justify-content:center;
 gap:14px;
 position:relative;
-height:70px;
+height:80px;
 align-items:center;
 }
 
 button{
 height:46px;
-min-width:120px;
+min-width:130px;
 padding:0 18px;
 border:none;
 border-radius:14px;
@@ -56,10 +57,11 @@ font-size:16px;
 display:flex;
 align-items:center;
 justify-content:center;
-transition:.2s ease;
 white-space:nowrap;
+transition:.2s ease;
 }
 
+/* YES */
 .yes{
 background:#ff5b8a;
 color:white;
@@ -69,28 +71,30 @@ color:white;
 transform:scale(.95);
 }
 
-/* base stabile */
+/* NO (mobile only after init) */
 .no{
 background:#eee;
 color:#111;
 position:relative;
 }
 
-.hidden{
-display:none;
-}
+/* hidden */
+.hidden{display:none;}
 
+/* memo */
 .memo{
 margin-top:16px;
 font-size:13px;
 opacity:.65;
 }
 
+/* final */
 .final{
 font-size:18px;
 line-height:1.6;
 }
 
+/* fade */
 .fade{
 animation:fade .35s ease;
 }
@@ -129,13 +133,12 @@ animation:blink 1s infinite;
 
 <h1>
 Visto il caldo,<br>
-ti va di andare a bere qualcosa? 
-🧊🍸🍺
+ti va di bere qualcosa? 🧊🍸🍺
 </h1>
 
 <div class="btn-row">
 
-<button class="yes" id="yesBtn" onclick="go2()">Sì 😌</button>
+<button class="yes" onclick="go2()">Sì 😌</button>
 <button class="no" id="noBtn">No 🙈</button>
 
 </div>
@@ -153,14 +156,19 @@ sta scrivendo<span class="dot">.</span><span class="dot">.</span><span class="do
 
 <p>
 Dove andiamo? 😊<br><br>
+Milano Nord 🌿 oppure Milano Sud 🌇
 </p>
+
+<div class="btn-row">
+
+<button onclick="go3()">Milano Nord 🌿</button>
+<button onclick="go3()">Milano Sud 🌇</button>
+
+</div>
 
 <div class="memo">
 ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 </div>
-
-<button onclick="go3()">Milano Nord 🌿</button>
-<button onclick="go3()">Milano Sud 🌇</button>
 
 </div>
 
@@ -169,8 +177,12 @@ ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 
 <h1>Quando?</h1>
 
+<div class="btn-row">
+
 <button onclick="finalStep()">Martedì 🌞</button>
 <button onclick="finalStep()">Dopo la vacanzina a Parigi 🥐</button>
+
+</div>
 
 </div>
 
@@ -179,7 +191,7 @@ ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 
 <div class="final">
 
-ora ci possiamo organizzare ahah
+ora ci possiamo organizzare a voce ahah
 
 <br><br>
 
@@ -201,10 +213,13 @@ document.querySelector(".btn-row");
 
 let activated = false;
 
-/* 🔥 FIX VERO: congelamento posizione perfetto */
+/* 🔥 NO movement (more reactive + more fun) */
 function moveNo(){
 
-/* prima volta: aggancia posizione reale */
+const r =
+btnRow.getBoundingClientRect();
+
+/* first time lock */
 if(!activated){
 
 const rect =
@@ -224,37 +239,32 @@ noBtn.style.top =
 activated = true;
 }
 
-/* movimento dentro area */
-const r =
-btnRow.getBoundingClientRect();
+/* MORE MOVEMENT (your request) */
+const maxX = r.width - 140;
+const maxY = r.height - 60;
 
-const maxX = r.width - 130;
-const maxY = r.height - 50;
+const x =
+Math.random() * maxX;
 
-const x = Math.random() * maxX;
-const y = Math.random() * maxY;
+const y =
+Math.random() * maxY;
 
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
 }
 
+/* stronger reaction */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
 
 /* YES flow */
 function go2(){
 
-const btn =
-document.getElementById("yesBtn");
-
-btn.style.transform="scale(1.05)";
-setTimeout(()=>btn.style.transform="scale(1)",120);
-
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 
-/* typing */
 setTimeout(()=>{
 document.getElementById("typing").classList.remove("hidden");
 },400);
@@ -266,7 +276,7 @@ document.getElementById("ottimo").classList.remove("hidden");
 
 }
 
-/* flow */
+/* steps */
 function go3(){
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");

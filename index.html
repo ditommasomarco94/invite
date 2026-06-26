@@ -6,7 +6,7 @@
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
 body{
 margin:0;
@@ -28,11 +28,12 @@ border-radius:28px;
 box-shadow:0 25px 60px rgba(0,0,0,.08);
 text-align:center;
 position:relative;
+transition:.4s ease;
 }
 
 h1{
 font-size:26px;
-margin-bottom:30px;
+margin-bottom:25px;
 }
 
 button{
@@ -42,6 +43,7 @@ border-radius:14px;
 margin:10px;
 cursor:pointer;
 font-size:16px;
+transition:.2s ease;
 }
 
 .yes{
@@ -49,8 +51,14 @@ background:#ff5b8a;
 color:white;
 }
 
+.yes:active{
+transform:scale(0.95);
+}
+
 .no{
-background:#eee;
+background:rgba(255,255,255,0.6);
+backdrop-filter: blur(10px);
+border:1px solid rgba(0,0,0,0.08);
 position:absolute;
 left:50%;
 transform:translateX(-50%);
@@ -71,6 +79,33 @@ font-size:18px;
 line-height:1.6;
 }
 
+/* fade anim */
+.fade{
+animation:fade .35s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(8px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* typing */
+.typing{
+font-size:18px;
+opacity:.7;
+display:inline-block;
+}
+
+.dot{
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:.2;}
+50%{opacity:1;}
+100%{opacity:.2;}
+}
+
 </style>
 
 </head>
@@ -80,30 +115,32 @@ line-height:1.6;
 <div class="card">
 
 <!-- STEP 1 -->
-<div id="s1">
+<div id="s1" class="fade">
 
 <h1>
 Visto il caldo,<br>
-ti va di andare a bere qualcosa? 🧊🍺🍸🧊
+ti va di bere qualcosa? 🧊🍸🍺
 </h1>
 
-<button class="yes" onclick="step2()">Sì 😌</button>
+<button class="yes" onclick="go2()">Sì 😌</button>
 <button class="no" id="noBtn">No 🙈</button>
 
 </div>
 
 <!-- STEP 2 -->
-<div id="s2" class="hidden">
+<div id="s2" class="hidden fade">
 
-<h1>ottimo 😏</h1>
+<div id="typing" class="typing hidden">
+sta scrivendo<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+</div>
 
-<p>
-Dove andiamo? 😊<br><br>
-Milano Nord 🌿 oppure Milano Sud 🌇
-</p>
+<h1 id="ottimo" class="hidden">ottimo 😏</h1>
 
-<button onclick="step3()">Milano Nord 🌿</button>
-<button onclick="step3()">Milano Sud 🌇</button>
+<p>Dove andiamo? 😊<br><br>
+Milano Nord 🌿 oppure Milano Sud 🌇</p>
+
+<button onclick="go3()">Milano Nord 🌿</button>
+<button onclick="go3()">Milano Sud 🌇</button>
 
 <div class="memo">
 ho dei crediti da consumare per venire a Milano Nord 😌👉👈
@@ -112,17 +149,17 @@ ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 </div>
 
 <!-- STEP 3 -->
-<div id="s3" class="hidden">
+<div id="s3" class="hidden fade">
 
 <h1>Quando?</h1>
 
-<button onclick="final()">Tipo, emh..martedì🌞</button>
-<button onclick="final()">Dopo la tua vacanzina a Parigi 🥐</button>
+<button onclick="finalStep()">Tipo… martedì 🌞</button>
+<button onclick="finalStep()">Dopo la tua vacanzina a Parigi 🥐</button>
 
 </div>
 
 <!-- FINAL -->
-<div id="final" class="hidden">
+<div id="final" class="hidden fade">
 
 <div class="final">
 
@@ -130,7 +167,7 @@ ora ci possiamo organizzare a voce ahah
 
 <br><br>
 
-🧊✨🍺🍷✨🧊
+🧊✨🍸🍺✨🧊
 
 </div>
 
@@ -146,46 +183,88 @@ document.getElementById("noBtn");
 const card =
 document.querySelector(".card");
 
+/* 🎯 NO starts aligned next to YES */
+function initNo(){
+
+const r =
+card.getBoundingClientRect();
+
+noBtn.style.position="absolute";
+
+noBtn.style.left="50%";
+
+noBtn.style.top="180px";
+
+noBtn.style.transform="translateX(-50%)";
+
+}
+
 function moveNo(){
 
 const r =
 card.getBoundingClientRect();
 
+const btnW = 120;
+const btnH = 60;
+
 const x =
-Math.random() * (r.width - 140);
+Math.random() * (r.width - btnW);
 
 const y =
-Math.random() * (r.height - 120);
+120 + Math.random() * (r.height - 200);
 
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
 }
 
+/* hover behavior */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 
-function step2(){
+/* YES micro vibration */
+function vibrateYes(btn){
+
+btn.style.transform="scale(1.05)";
+setTimeout(()=>btn.style.transform="scale(1)",120);
+}
+
+/* STEP FLOW */
+function go2(){
+
+vibrateYes(event.target);
 
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 
+/* typing effect */
+setTimeout(()=>{
+document.getElementById("typing").classList.remove("hidden");
+},400);
+
+setTimeout(()=>{
+document.getElementById("typing").classList.add("hidden");
+document.getElementById("ottimo").classList.remove("hidden");
+},1600);
+
 }
 
-function step3(){
+function go3(){
 
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
 
 }
 
-function final(){
+function finalStep(){
 
 document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
 
 }
 
+/* init */
+initNo();
 moveNo();
 
 </script>

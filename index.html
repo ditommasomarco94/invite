@@ -56,7 +56,9 @@ left:50%;
 transform:translateX(-50%);
 }
 
-.hidden{display:none;}
+.hidden{
+display:none;
+}
 
 .memo{
 margin-top:16px;
@@ -70,6 +72,7 @@ line-height:1.6;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -81,11 +84,10 @@ line-height:1.6;
 
 <h1>
 Visto il caldo,<br>
-ti va di andare a bere qualcosa? 
-🍺🍷
+ti va di bere qualcosa? 🍺🍷
 </h1>
 
-<button class="yes" onclick="go2()">Sì 😌</button>
+<button class="yes" onclick="step2()">Sì 😌</button>
 <button class="no" id="noBtn">No 🙈</button>
 
 </div>
@@ -101,8 +103,8 @@ o<br>
 Milano Sud
 </p>
 
-<button onclick="go3()">Milano Nord 🌿</button>
-<button onclick="go3()">Milano Sud 🌇</button>
+<button onclick="step3()">Milano Nord 🌿</button>
+<button onclick="step3()">Milano Sud 🌇</button>
 
 <div class="memo">
 io ho dei crediti per venire a Milano Nord 🥺
@@ -115,8 +117,8 @@ io ho dei crediti per venire a Milano Nord 🥺
 
 <h1>Quando?</h1>
 
-<button onclick="goFinal()">Martedì</button>
-<button onclick="goFinal()">Dopo la vacanzina a Parigi ✈️</button>
+<button onclick="final()">Martedì</button>
+<button onclick="final()">Dopo la vacanzina a Parigi ✈️</button>
 
 </div>
 
@@ -151,7 +153,7 @@ const r =
 card.getBoundingClientRect();
 
 const x =
-Math.random() * (r.width - 120);
+Math.random() * (r.width - 140);
 
 const y =
 Math.random() * (r.height - 120);
@@ -164,21 +166,21 @@ noBtn.style.top = y + "px";
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 
-function go2(){
+function step2(){
 
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 
 }
 
-function go3(){
+function step3(){
 
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
 
 }
 
-function goFinal(){
+function final(){
 
 document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");

@@ -40,6 +40,7 @@ display:flex;
 justify-content:center;
 gap:14px;
 position:relative;
+height:70px;
 }
 
 button{
@@ -62,7 +63,9 @@ transform:scale(.95);
 
 .no{
 background:#eee;
-position:relative;
+position:absolute;
+left:0;
+top:0;
 }
 
 .hidden{
@@ -121,9 +124,11 @@ Visto il caldo,<br>
 ti va di bere qualcosa? 🧊🍸🍺
 </h1>
 
-<div class="btn-row">
+<div class="btn-row" id="btnRow">
+
 <button class="yes" onclick="go2(event)">Sì 😌</button>
 <button class="no" id="noBtn">No 🙈</button>
+
 </div>
 
 </div>
@@ -183,23 +188,23 @@ ora ci possiamo organizzare a voce ahah
 const noBtn =
 document.getElementById("noBtn");
 
-const card =
-document.querySelector(".card");
+const btnRow =
+document.getElementById("btnRow");
 
-/* MOVE NO (with proper initial alignment fix) */
+/* FIX: perfect alignment then escape */
 function moveNo(){
 
 const r =
-card.getBoundingClientRect();
+btnRow.getBoundingClientRect();
 
-/* first time: convert from inline to absolute WITHOUT jump */
+/* first time: lock EXACT position next to Sì */
 if(noBtn.dataset.init !== "1"){
 
 const rect =
 noBtn.getBoundingClientRect();
 
 const parentRect =
-card.getBoundingClientRect();
+btnRow.getBoundingClientRect();
 
 noBtn.style.position="absolute";
 
@@ -212,22 +217,26 @@ noBtn.style.top =
 noBtn.dataset.init = "1";
 }
 
-/* then start escaping */
+/* escape movement inside row */
+const maxX = r.width - 120;
+const maxY = r.height - 50;
+
 const x =
-Math.random() * (r.width - 140);
+Math.random() * maxX;
 
 const y =
-120 + Math.random() * (r.height - 200);
+Math.random() * maxY;
 
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
 }
 
+/* interaction */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 
-/* YES effect + flow */
+/* YES flow */
 function go2(e){
 
 const btn = e.target;
@@ -235,7 +244,7 @@ const btn = e.target;
 btn.style.transform="scale(1.05)";
 setTimeout(()=>btn.style.transform="scale(1)",120);
 
-/* step transition */
+/* next step */
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 

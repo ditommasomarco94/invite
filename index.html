@@ -30,13 +30,12 @@ text-align:center;
 position:relative;
 }
 
-/* TITOLI */
 h1{
 font-size:26px;
 margin-bottom:25px;
 }
 
-/* 🔥 STANDARD UI BUTTONS (FIX TUTTO) */
+/* GLOBAL BUTTON UI */
 .btn-row{
 display:flex;
 justify-content:center;
@@ -61,7 +60,6 @@ white-space:nowrap;
 transition:.2s ease;
 }
 
-/* YES */
 .yes{
 background:#ff5b8a;
 color:white;
@@ -71,30 +69,25 @@ color:white;
 transform:scale(.95);
 }
 
-/* NO (mobile only after init) */
 .no{
 background:#eee;
 color:#111;
 position:relative;
 }
 
-/* hidden */
 .hidden{display:none;}
 
-/* memo */
 .memo{
 margin-top:16px;
 font-size:13px;
 opacity:.65;
 }
 
-/* final */
 .final{
 font-size:18px;
 line-height:1.6;
 }
 
-/* fade */
 .fade{
 animation:fade .35s ease;
 }
@@ -213,13 +206,13 @@ document.querySelector(".btn-row");
 
 let activated = false;
 
-/* 🔥 NO movement (more reactive + more fun) */
+/* 🔥 MORE LIVELY NO BUTTON */
 function moveNo(){
 
 const r =
 btnRow.getBoundingClientRect();
 
-/* first time lock */
+/* lock initial position */
 if(!activated){
 
 const rect =
@@ -239,22 +232,31 @@ noBtn.style.top =
 activated = true;
 }
 
-/* MORE MOVEMENT (your request) */
-const maxX = r.width - 140;
-const maxY = r.height - 60;
+/* 💥 BIGGER RANDOM RANGE + more chaos */
+const maxX = r.width - 150;
+const maxY = r.height - 70;
 
-const x =
-Math.random() * maxX;
-
-const y =
-Math.random() * maxY;
+/* avoid center zone */
+let x, y;
+do {
+x = Math.random() * maxX;
+y = Math.random() * maxY;
+} while (x > maxX*0.3 && x < maxX*0.7);
 
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
+/* little “double jump” effect */
+setTimeout(()=>{
+noBtn.style.transform = "scale(1.05)";
+setTimeout(()=>{
+noBtn.style.transform = "scale(1)";
+},120);
+},80);
+
 }
 
-/* stronger reaction */
+/* stronger interaction */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 noBtn.addEventListener("touchstart", moveNo);

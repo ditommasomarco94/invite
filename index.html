@@ -56,7 +56,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 white-space:nowrap;
-transition:.25s ease;
+transition:.2s ease;
 }
 
 .yes{
@@ -148,8 +148,8 @@ Milano Nord 🌿 oppure Milano Sud 🌇
 
 <div class="btn-row">
 
-<button onclick="go3()">Milano Nord 🌿</button>
-<button onclick="go3()">Milano Sud 🌇</button>
+<button onclick="go3('Milano Nord')">Milano Nord 🌿</button>
+<button onclick="go3('Milano Sud')">Milano Sud 🌇</button>
 
 </div>
 
@@ -166,8 +166,8 @@ ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 
 <div class="btn-row">
 
-<button onclick="finalStep()">Martedì 🌞</button>
-<button onclick="finalStep()">Dopo la vacanzina a Parigi 🥐</button>
+<button onclick="finalStep('Martedì')">Martedì 🌞</button>
+<button onclick="finalStep('Dopo Parigi')">Dopo la vacanzina a Parigi 🥐</button>
 
 </div>
 
@@ -187,74 +187,25 @@ ora ci possiamo organizzare a voce ahah<br><br>
 
 <script>
 
-const noBtn = document.getElementById("noBtn");
-const btnRow = document.querySelector(".btn-row");
+/* 🔥 FORMSPREE */
+const FORM_ENDPOINT = "https://formspree.io/f/xgojkegv";
 
-let activated = false;
-let step = 0;
+/* dati scelta */
+let selectedZone = "";
+let selectedTime = "";
 
-/* 😌 SMOOTH CONTROLLED MOVE */
-function moveNo(){
-
-const r = btnRow.getBoundingClientRect();
-
-/* first lock position */
-if(!activated){
-
-const rect = noBtn.getBoundingClientRect();
-const parent = btnRow.getBoundingClientRect();
-
-noBtn.style.position = "absolute";
-noBtn.style.left = (rect.left - parent.left) + "px";
-noBtn.style.top = (rect.top - parent.top) + "px";
-
-activated = true;
+/* send function */
+function sendToFormspree(data){
+  fetch(FORM_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
 }
 
-/* gradual increase (gentle learning) */
-step++;
-
-/* bigger area but still elegant */
-const margin = 60 + step * 6;
-
-const maxX = r.width + margin;
-const maxY = r.height + margin;
-
-/* smooth random movement */
-let x = Math.random() * maxX;
-let y = Math.random() * maxY;
-
-/* keep inside card bounds */
-x = Math.max(0, Math.min(r.width - 120, x));
-y = Math.max(0, Math.min(r.height - 50, y));
-
-/* 💡 IMPORTANT PART: smooth transition */
-const speed = 1 + step * 0.05;
-
-noBtn.style.transition =
-`left ${0.35 / speed}s ease-in-out,
- top ${0.35 / speed}s ease-in-out,
- transform 0.2s ease`;
-
-noBtn.style.left = x + "px";
-noBtn.style.top = y + "px";
-
-/* subtle feedback, NOT aggressive */
-noBtn.style.transform = "scale(1.03)";
-
-setTimeout(()=>{
-noBtn.style.transform = "scale(1)";
-},150);
-
-}
-
-/* interactions */
-noBtn.addEventListener("mouseenter", moveNo);
-noBtn.addEventListener("mousemove", moveNo);
-noBtn.addEventListener("click", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
-
-/* YES */
+/* STEP CONTROL */
 function go2(){
 
 document.getElementById("s1").classList.add("hidden");
@@ -271,16 +222,76 @@ document.getElementById("ottimo").classList.remove("hidden");
 
 }
 
-/* steps */
-function go3(){
+function go3(zone){
+selectedZone = zone;
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
 }
 
-function finalStep(){
+function finalStep(time){
+selectedTime = time;
+
+/* 📩 SEND HERE */
+sendToFormspree({
+  risposta: "si",
+  zona: selectedZone,
+  quando: selectedTime
+});
+
 document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
 }
+
+/* NO button movement (smooth controlled) */
+const noBtn = document.getElementById("noBtn");
+const btnRow = document.querySelector(".btn-row");
+
+let activated = false;
+let step = 0;
+
+function moveNo(){
+
+const r = btnRow.getBoundingClientRect();
+
+if(!activated){
+
+const rect = noBtn.getBoundingClientRect();
+const parent = btnRow.getBoundingClientRect();
+
+noBtn.style.position="absolute";
+noBtn.style.left = (rect.left - parent.left) + "px";
+noBtn.style.top = (rect.top - parent.top) + "px";
+
+activated = true;
+}
+
+step++;
+
+const margin = 60 + step * 6;
+const maxX = r.width + margin;
+const maxY = r.height + margin;
+
+let x = Math.random() * maxX;
+let y = Math.random() * maxY;
+
+x = Math.max(0, Math.min(r.width - 120, x));
+y = Math.max(0, Math.min(r.height - 50, y));
+
+const speed = 1 + step * 0.05;
+
+noBtn.style.transition =
+`left ${0.35 / speed}s ease-in-out,
+ top ${0.35 / speed}s ease-in-out`;
+
+noBtn.style.left = x + "px";
+noBtn.style.top = y + "px";
+
+}
+
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("mousemove", moveNo);
+noBtn.addEventListener("click", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
 
 window.onload = () => {
 activated = false;

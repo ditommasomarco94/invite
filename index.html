@@ -38,7 +38,7 @@ margin-bottom:25px;
 .btn-row{
 display:flex;
 justify-content:center;
-gap:12px;
+gap:14px;
 position:relative;
 }
 
@@ -48,7 +48,7 @@ border:none;
 border-radius:14px;
 cursor:pointer;
 font-size:16px;
-transition:.2s;
+transition:.2s ease;
 }
 
 .yes{
@@ -118,7 +118,7 @@ animation:blink 1s infinite;
 
 <h1>
 Visto il caldo,<br>
-ti va di andare a bere qualcosa? 🧊🍸🍺
+ti va di bere qualcosa? 🧊🍸🍺
 </h1>
 
 <div class="btn-row">
@@ -139,6 +139,7 @@ sta scrivendo<span class="dot">.</span><span class="dot">.</span><span class="do
 
 <p>
 Dove andiamo? 😊<br><br>
+Milano Nord 🌿 oppure Milano Sud 🌇
 </p>
 
 <button onclick="go3()">Milano Nord 🌿</button>
@@ -185,29 +186,48 @@ document.getElementById("noBtn");
 const card =
 document.querySelector(".card");
 
-/* NO movement */
+/* MOVE NO (with proper initial alignment fix) */
 function moveNo(){
 
 const r =
 card.getBoundingClientRect();
 
+/* first time: convert from inline to absolute WITHOUT jump */
+if(noBtn.dataset.init !== "1"){
+
+const rect =
+noBtn.getBoundingClientRect();
+
+const parentRect =
+card.getBoundingClientRect();
+
+noBtn.style.position="absolute";
+
+noBtn.style.left =
+(rect.left - parentRect.left) + "px";
+
+noBtn.style.top =
+(rect.top - parentRect.top) + "px";
+
+noBtn.dataset.init = "1";
+}
+
+/* then start escaping */
 const x =
 Math.random() * (r.width - 140);
 
 const y =
 120 + Math.random() * (r.height - 200);
 
-noBtn.style.position="absolute";
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
 }
 
-/* hover escape */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 
-/* YES micro effect + flow */
+/* YES effect + flow */
 function go2(e){
 
 const btn = e.target;
@@ -219,7 +239,7 @@ setTimeout(()=>btn.style.transform="scale(1)",120);
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 
-/* typing */
+/* typing effect */
 setTimeout(()=>{
 document.getElementById("typing").classList.remove("hidden");
 },400);

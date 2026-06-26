@@ -187,25 +187,46 @@ ora ci possiamo organizzare a voce ahah<br><br>
 
 <script>
 
-/* 🔥 FORMSPREE */
-const FORM_ENDPOINT = "https://formspree.io/f/xgojkegv";
+/* =========================
+   TELEGRAM CONFIG
+   ========================= */
+const BOT_TOKEN = "8745230529:AAEFzd1PGN0yAF8Tefqn6TXQTdmDmkI9Y50";
+const CHAT_ID = "71906563";
 
-/* dati scelta */
+/* =========================
+   TELEGRAM SEND FUNCTION
+   ========================= */
+function sendTelegram(data){
+
+const text =
+`🍸 NUOVA RISPOSTA
+
+😌 Risposta: si
+📍 Zona: ${data.zona}
+📅 Quando: ${data.quando}`;
+
+fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+chat_id: CHAT_ID,
+text: text
+})
+});
+
+}
+
+/* =========================
+   FLOW VARIABLES
+   ========================= */
 let selectedZone = "";
 let selectedTime = "";
 
-/* send function */
-function sendToFormspree(data){
-  fetch(FORM_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
-}
-
-/* STEP CONTROL */
+/* =========================
+   STEP 1 → STEP 2
+   ========================= */
 function go2(){
 
 document.getElementById("s1").classList.add("hidden");
@@ -222,18 +243,24 @@ document.getElementById("ottimo").classList.remove("hidden");
 
 }
 
+/* =========================
+   STEP 2 → STEP 3
+   ========================= */
 function go3(zone){
 selectedZone = zone;
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
 }
 
+/* =========================
+   FINAL STEP + SEND
+   ========================= */
 function finalStep(time){
+
 selectedTime = time;
 
-/* 📩 SEND HERE */
-sendToFormspree({
-  risposta: "si",
+/* 📩 SEND TELEGRAM */
+sendTelegram({
   zona: selectedZone,
   quando: selectedTime
 });
@@ -242,7 +269,9 @@ document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
 }
 
-/* NO button movement (smooth controlled) */
+/* =========================
+   NO BUTTON (SMOOTH MOVE)
+   ========================= */
 const noBtn = document.getElementById("noBtn");
 const btnRow = document.querySelector(".btn-row");
 
@@ -253,6 +282,7 @@ function moveNo(){
 
 const r = btnRow.getBoundingClientRect();
 
+/* lock initial position */
 if(!activated){
 
 const rect = noBtn.getBoundingClientRect();

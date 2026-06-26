@@ -64,8 +64,6 @@ transform:scale(.95);
 .no{
 background:#eee;
 position:absolute;
-left:0;
-top:0;
 }
 
 .hidden{
@@ -147,12 +145,12 @@ Dove andiamo? 😊<br><br>
 Milano Nord 🌿 oppure Milano Sud 🌇
 </p>
 
-<button onclick="go3()">Milano Nord 🌿</button>
-<button onclick="go3()">Milano Sud 🌇</button>
-
 <div class="memo">
 ho dei crediti da consumare per venire a Milano Nord 😌👉👈
 </div>
+
+<button onclick="go3()">Milano Nord 🌿</button>
+<button onclick="go3()">Milano Sud 🌇</button>
 
 </div>
 
@@ -191,48 +189,44 @@ document.getElementById("noBtn");
 const btnRow =
 document.getElementById("btnRow");
 
-/* FIX: perfect alignment then escape */
-function moveNo(){
-
-const r =
-btnRow.getBoundingClientRect();
-
-/* first time: lock EXACT position next to Sì */
-if(noBtn.dataset.init !== "1"){
+/* FIX: perfect initial alignment */
+function initNo(){
 
 const rect =
 noBtn.getBoundingClientRect();
 
-const parentRect =
+const parent =
 btnRow.getBoundingClientRect();
 
 noBtn.style.position="absolute";
 
 noBtn.style.left =
-(rect.left - parentRect.left) + "px";
+(rect.left - parent.left) + "px";
 
 noBtn.style.top =
-(rect.top - parentRect.top) + "px";
+(rect.top - parent.top) + "px";
 
-noBtn.dataset.init = "1";
+noBtn.dataset.init="1";
+
 }
 
-/* escape movement inside row */
+/* move after hover */
+function moveNo(){
+
+const r =
+btnRow.getBoundingClientRect();
+
 const maxX = r.width - 120;
 const maxY = r.height - 50;
 
-const x =
-Math.random() * maxX;
-
-const y =
-Math.random() * maxY;
+const x = Math.random() * maxX;
+const y = Math.random() * maxY;
 
 noBtn.style.left = x + "px";
 noBtn.style.top = y + "px";
 
 }
 
-/* interaction */
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("click", moveNo);
 
@@ -244,11 +238,9 @@ const btn = e.target;
 btn.style.transform="scale(1.05)";
 setTimeout(()=>btn.style.transform="scale(1)",120);
 
-/* next step */
 document.getElementById("s1").classList.add("hidden");
 document.getElementById("s2").classList.remove("hidden");
 
-/* typing effect */
 setTimeout(()=>{
 document.getElementById("typing").classList.remove("hidden");
 },400);
@@ -260,22 +252,19 @@ document.getElementById("ottimo").classList.remove("hidden");
 
 }
 
+/* steps */
 function go3(){
-
 document.getElementById("s2").classList.add("hidden");
 document.getElementById("s3").classList.remove("hidden");
-
 }
 
 function finalStep(){
-
 document.getElementById("s3").classList.add("hidden");
 document.getElementById("final").classList.remove("hidden");
-
 }
 
-/* init */
-moveNo();
+/* init on load */
+window.onload = initNo;
 
 </script>
 
